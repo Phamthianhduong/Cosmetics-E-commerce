@@ -1,0 +1,59 @@
+
+<section class="cart" id="cart">
+  {{#if product.length}}
+  <h1 class="heading">{{name}}</h1>
+  <table width="100%">
+    <thead style="padding: 3rem;">
+      <tr>
+        <td>Image</td>
+        <td>Name</td>
+        <td>Quantity</td>
+        <td>Price</td>
+      </tr>
+    </thead>
+    <tbody style="padding: 3rem;">
+      {{#each product}}
+      <tr>
+        
+        <td><img src="{{this.product.imgURL}}" alt="{{this.product.name}}"></td>
+        <td><h3>{{allCaps this.product.name}}</h3></td>
+        <td><h4 style="font-size:2rem;">{{this.quantity}}</h4></td>
+        <td><div style="font-size:2rem;" class="price">${{calculateProductPrice this.product.price this.quantity}}</div></td>
+        <td><button style="width:9rem;height:9rem;align-items:right;font-size:2.5rem"class="bx bxs-trash" id="trash-button"onclick="DeleteItemFromCart('{{../userId}}', '{{this.product._id}}')"></button></td>        
+      </tr>
+      {{/each}}  
+    </tbody>
+
+  </table> 
+  <div class="totalPrice" style="text-align: right; padding: 3rem;">
+    <button>Total: ${{totalPrice}}</button>
+  </div>
+  </section>
+  {{else}}
+    <div class="empty-cart">
+      <img src="/images/cart.png" alt="No results found" class="no-results-image">
+      <h1 class="heading">YOUR CART IS EMPTY</h1>
+    </div>
+  {{/if}}
+
+
+
+  <script>
+  
+   async function DeleteItemFromCart(userId, productId) {
+    $.post('/cart/delete', {
+        userId: userId,
+        productId: productId,
+    }, async (data) => {
+        if (data == true) {
+            await SWAlert("Deleted product successfully", "success")
+        } else {
+            await SWAlert("Can't remove product from cart", "error")      
+        }
+        window.location.reload()
+        
+    })
+
+  } 
+  </script> 
+

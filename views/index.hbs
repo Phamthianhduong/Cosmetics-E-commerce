@@ -1,0 +1,178 @@
+
+    <!--header-->
+
+
+{{!--     <form action="" class="search-form">
+        <input type="search" id="search-box" placeholder="...">
+        <label for="search-box" class="bx bx-search"></label>
+
+    </form> --}}
+    
+
+</section>
+    <!--home-->
+<div class="home-bg">
+    <section class="home" id="home">
+        
+        <div class="content">
+            <h3> WABISABI COSMETICS </h3>
+            <a href="#products" class="btn">Shop now</a>
+            
+        </div>
+
+    </section>
+</div>
+    <!--about-->
+<section class="about" id="about">
+    <div class="image">
+        <img src="https://res.cloudinary.com/dhrk1no6n/image/upload/v1679763379/dm/img/Screen-Shot-2018-11-02-at-11.47.39-AM_kjfe3i.png" alt="">
+    </div>
+    <div class="content">
+        <h5>NEW!</h5>
+        <h3>Moisture Cream</h3>
+        <p>A cosmetic preparation used for protecting, moisturizing, and lubricating the skin. These functions are normally performed by sebum produced by healthy skin.</p>
+        <a href="/product/detail/641f29a609ff2c6088d5c620" class="btn">Shop now</a>
+    </div>
+</section>
+    <!--Best seller-->
+<section class="bestseller" id="bestseller">
+        <h1 class="heading"> BESTSELLERS</h1>
+
+        <div class="box-container">
+         {{#each bestsellers}}
+            <div class="box">
+                <a href="/product/detail/{{this._id}}">
+                <img src="{{this.imgURL}}" alt="">
+                <div class="stars">
+                    <i class="bx bxs-star"></i>
+                    <i class="bx bxs-star"></i>
+                    <i class="bx bxs-star"></i>
+                    <i class="bx bxs-star"></i>
+                    <i class="bx bxs-star-half"></i>
+                </div>
+                <h3>{{allCaps this.name}}</h3>
+                <div class="price">${{this.price}}</div>
+             
+                </a>
+                <button href="/" class="btn" onclick = AddToCart('{{this._id}}')>Add to cart</button> 
+               
+                
+            </div>
+            {{/each}}
+        </div>
+         
+</section>
+    <!--Our work-->
+<section class="ourwork" id="ourwork">
+    <h1 class="heading">OUR WORK</h1>
+    <div class="content">
+        <div class="itemitem1">
+            <img src="https://res.cloudinary.com/dhrk1no6n/image/upload/v1679763377/dm/img/our_work_2_cfnizc.jpg">
+            <h2 class="heading1">SKINCARE BESTSELLERS</h2>
+            <a href="/product/index" class="btn">Learn more</a>
+        </div>
+        <div class="itemitem2">
+            <img src="https://res.cloudinary.com/dhrk1no6n/image/upload/v1679763378/dm/img/our_work_xuya8i.jpg">
+            <h2 class="heading1">TRENDING LIPSTICKS</h2>
+            <a href="/product/index" class="btn">Learn more</a>
+        </div>
+
+    </div>
+</section>
+    <!--shop by brand-->
+<section class="brand" id="brand">
+    <h1 class="heading"> SHOP BY BRAND </h1>
+    <div class="box-container">
+         {{#each productbyBrand}}
+            <div class="box">
+                <a href="/product/detail/{{this._id}}">
+                <img src="{{this.imgURL}}" alt="">
+                <div class="stars">
+                    <i class="bx bxs-star"></i>
+                    <i class="bx bxs-star"></i>
+                    <i class="bx bxs-star"></i>
+                    <i class="bx bxs-star"></i>
+                    <i class="bx bxs-star-half"></i>
+                </div>
+                <h3>{{allCaps this.name}}</h3>
+                <div class="price">${{this.price}}</div>
+             
+                </a>
+                <button href="/cart/add" class="btn" onclick = AddToCart('{{this._id}}')>Add to cart</button> 
+               
+                
+            </div>
+            {{/each}}
+        </div>
+       
+    
+       
+
+</section>
+    <!--service start-->
+
+<h1 class="heading"> SERVICES </h1>
+<section class="service">
+    <div class="boxes">
+        <img src="https://res.cloudinary.com/dhrk1no6n/image/upload/v1685043490/dm/img/297361935_2199662166860494_6428979914299211923_n_keqoa1.jpg">
+        <h3> FRAGRANCE AND BEAUTY BOUTIQUES </h3>
+    </div>
+
+    <div class="boxes">
+        <img src="https://res.cloudinary.com/dhrk1no6n/image/upload/v1685040127/dm/img/chidepblog2_mez9rs.jpg">
+        <h3> EXCLUSIVE SAMPLES</h3>
+    </div>
+
+    <div class="boxes">
+       <img src="https://res.cloudinary.com/dhrk1no6n/image/upload/v1685040140/dm/img/chidepblog3_a8s7g5.jpg">
+        <h3> SKINCARE GUIDANCE </h3>
+    </div>
+
+</section>
+    <!--footer section-->
+
+
+<script> 
+  
+
+  function AddToCart(productId) {
+    //let Mybag = localStorage.getItem("Cart")
+
+    //Init let
+    let userId = localStorage.getItem("userId")
+   /* let productOfUser = localStorage.getItem("ShoppingCard"+userId)
+      if(productOfUser.includes(productId))
+    localStorage.setItem("ShoppingCard"+userId,productOfUser+","+productId) */
+    
+   $.post('/cart/add', {
+        productId: productId,
+        userId: userId,
+    }, async(data) => {
+        if (data === "true") {
+           SWAlert('Added to cart successfully', 'success')
+        } else {
+            SWAlert('Cannot add product to cart', 'error')
+        }
+    })
+   /* if (Mybag == "" || Mybag == null || Mybag == undefined) {
+      localStorage.setItem("Cart", productId)
+      SWAlert('Added to cart successfully', 'success')
+      return;
+    } 
+    SWAlert('Added to cart successfully', 'success')
+    var listMyBag = Mybag.split(",")
+    listMyBag.push(productId);
+    localStorage.setItem('Cart', listMyBag) */
+  }
+
+ /* async function GetCart() {
+    const userId = localStorage.getItem('userId')
+    var data = await $.get(`cart/${userId}`)
+    let cart = '';
+    items.forEach(item => {
+        cart += '<div>${item.product}'
+    })
+} */ 
+
+
+</script>

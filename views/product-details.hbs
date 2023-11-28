@@ -1,0 +1,48 @@
+<section class="product-details">
+  
+
+     <img src = "{{product.imgURL}}" alt="{{product.name}}" width="100%">
+
+     <div class="box-container">
+        <h3>{{allCaps product.name}}</h3>
+        <h4>Ratings<h4>
+        <div class="stars">
+          <i class="bx bxs-star"></i>
+          <i class="bx bxs-star"></i>
+          <i class="bx bxs-star"></i>
+          <i class="bx bxs-star"></i>
+          <i class="bx bxs-star-half"></i>
+        </div>
+        <div class="price"> $ {{formatNumber product.price}} </div>
+        <!--input type ="number" value = "1"-->
+        <h4> Category: {{product.category}}</h4>
+        <h3>Description</h3>
+        <div class="description"> {{ product.description}}</div>
+        <button href="/" class="btn" onclick = AddToCart('{{product._id}}')>Add to cart</button> 
+      </div>      
+
+</section>
+<script>
+     function AddToCart(productId) {
+    
+      let userId = localStorage.getItem("userId")
+      $.post('/cart/add', {
+           productId: productId,
+           userId: userId,
+       }, async(data) => {
+           if (data === "true") {
+              SWAlert('Added to cart successfully', 'success')
+           } else {
+               SWAlert('Cannot add product to cart', 'error')
+           }
+       })
+     
+     }
+
+
+</script>
+
+
+
+
+     

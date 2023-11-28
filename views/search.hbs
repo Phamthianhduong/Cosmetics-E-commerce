@@ -1,0 +1,48 @@
+<section class = "search-results">
+{{#if data.length}}
+  <h1 class="heading">Search Results for {{query}}</h1>
+  <div class="box-container">
+  {{#each data}}
+    <div class="search-product">
+      <img src="{{this.imgURL}}" alt = {{this.imgURL}}>
+      <div class="stars">
+        <i class="bx bxs-star"></i>
+        <i class="bx bxs-star"></i>
+        <i class="bx bxs-star"></i>
+        <i class="bx bxs-star"></i>
+        <i class="bx bxs-star-half"></i>
+      </div>
+      <h3>{{allCaps this.name}}</h3>
+      <div class="price">Price: ${{this.price}}</div>
+      <button href="/" class="btn" onclick = AddToCart('{{this._id}}')>Add to cart</button>
+    </div>
+  {{/each}}
+  </div>
+{{else}}
+
+  <div class="no-results-container">
+      <img src="https://res.cloudinary.com/dhrk1no6n/image/upload/v1684666168/dm/img/search_babpmw.png" alt="No results found" class="no-results-image">
+      <h1 class="heading">No results found for "{{query}}"</h1>
+    </div>
+
+{{/if}}
+<style>
+  .clickdetail:hover {
+    opacity: 1
+  }
+
+   .no-results-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity:initial;
+    }
+    .no-results-image {
+      width: 700px; /* Adjust the width as needed */
+      height: auto; /* Maintain aspect ratio */
+      margin-bottom: 20px;
+    }
+</style> 
+
+</section>

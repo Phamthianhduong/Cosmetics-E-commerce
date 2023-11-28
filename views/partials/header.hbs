@@ -1,0 +1,155 @@
+<section id = "header" class ="header">
+    
+    <a href = "#" class = "logo">WABISABI</a>
+    <nav class = "navbar">
+        <a href="/">Home</a>
+        <a href="/product/index">Products</a>
+
+    </nav>
+    <div class ="icons">
+        <form method="GET" action="/search">
+        <input type="search" class="search-container" name="q" placeholder="Search here ..." required>
+        <button class="bx bx-search" id="search-btn" type="submit" ></button>
+        </form>
+        <!-- <button class="bx bx-shopping-bag" id="shopping bag" onclick="displayCart()"> -->
+        <button class="bx bxs-user" id="user-icon" onclick="Login()"></button>
+    </div>
+
+</section>  
+
+<script>
+    $(document).ready(function() {
+        $('.icons #search-btn').click(function(){
+            $('.icons .search-container').toggle();
+        })
+    })
+    
+//login roi thi set user index o localstorage
+    SetUserIndex() 
+
+    function SetUserIndex() {
+        var a = localStorage.getItem('userName')
+        if (a!=null) {
+            var id = localStorage.getItem('userId')
+            $('.icons #user-icon').replaceWith(`
+            <div class ="bag">
+                <a href ="/cart/${id}"><button class="bx bx-shopping-bag" id="shopping-bag"></button></a>
+            </div>
+            <div class="dropdown">
+                &#160<span onclick ="myFunction()" class="dropbtn" style="font-size: 1.8rem;color: #101010" >Welcome! ${a}</span>
+                <div id="myDropdown" class="dropdown-content">
+                    
+                    <button class="logout" onclick="Logout()">Logout</button></div>
+                </div>
+            </div> 
+            `) 
+
+        }
+    }
+    
+
+    function SWAlert(title, icon) {
+        return Swal.fire({
+            title: title,
+            icon: icon,
+        });
+    } 
+
+    
+
+    async function Login() {
+        const { value: formValues } = await Swal.fire({
+            title: 'Login Form',
+            html: `<input type="text" id="username" class="swal2-input" placeholder="username">
+                   <input type="password" id="password" class="swal2-input" placeholder="password">`,
+            showDenyButton: true,
+            confirmButtonText: 'Sign in',
+            denyButtonText: 'Cancel',
+            customClass: 'swal-wide',
+            focusConfirm: false,
+            className: "sweet-alert",
+            preConfirm: () => {
+                return [
+                   document.getElementById('username').value,
+                   document.getElementById('password').value
+                   /* $('#username').val(),
+                    $('#password').val() */
+                ];
+            }, 
+            inputAttributes: {
+                autocapitalize: 'off'
+            }
+        });
+        if (formValues) {
+            $.post('/login', {
+                username: formValues[0],
+                password: formValues[1],
+            }, async (data) => {
+                if (data === "true") {
+                    $.post('/getuser', {
+                        username: formValues[0]
+                    }, (data) => {
+                        localStorage.setItem('userName', data.username)
+                        localStorage.setItem('userId', data._id)
+                    })
+                    //notify that user that has been logined, this is temp since it supposes to redirect to another page
+                    await SWAlert("Login successfully", "success");
+                    window.location.reload();
+                } else {
+                    await SWAlert("Login failed", "error");
+                }
+            });
+        } 
+    }  
+    
+    async function displayCart() {
+        const userId = localStorage.getItem('userId')
+        
+         $.get('/cart/' + userId, (items) => 
+         console.log(items))
+    }
+    
+
+    
+
+     async function Logout(){
+       var logout = await Swal.fire({
+        title: "Are you sure you want to logout?",
+        icon: 'question',
+        showDenyButton: true,
+        denyButtonText: "Cancel",
+        confirmButtonText: "Yes" })
+
+        if (logout.isConfirmed) {
+            localStorage.removeItem("userName")
+            localStorage.removeItem("userId")
+            window.location.href = '/'
+        }
+    }
+
+    </script>
+    
+
+
+
+<script>
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+</script>
+
+    

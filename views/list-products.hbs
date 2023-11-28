@@ -1,0 +1,50 @@
+<section class="list-products">
+    <h1 class="heading">Our Products</h1>
+
+    <div class="box-container">
+        {{#each prods}}
+            <div class="box">
+                <a href="/product/detail/{{this._id}}">
+                <img src="{{this.imgURL}}" alt="">
+                <div class="stars">
+                    <i class="bx bxs-star"></i>
+                    <i class="bx bxs-star"></i>
+                    <i class="bx bxs-star"></i>
+                    <i class="bx bxs-star"></i>
+                    <i class="bx bxs-star-half"></i>
+                </div>
+                <h3>{{allCaps this.name}}</h3>
+                <div class="price">${{this.price}}</div>
+                </a>
+                <button href="/" class="btn" onclick = AddToCart('{{this._id}}')>Add to cart</button> 
+               
+                
+            </div>
+            {{/each}}
+        </div>
+    </div>
+</section> 
+
+<script>
+    function AddToCart(productId) {
+    //let Mybag = localStorage.getItem("Cart")
+
+    //Init let
+    let userId = localStorage.getItem("userId")
+   /* let productOfUser = localStorage.getItem("ShoppingCard"+userId)
+      if(productOfUser.includes(productId))
+    localStorage.setItem("ShoppingCard"+userId,productOfUser+","+productId) */
+    
+   $.post('/cart/add', {
+        productId: productId,
+        userId: userId,
+    }, async(data) => {
+        if (data === "true") {
+           SWAlert('Added to cart successfully', 'success')
+        } else {
+            SWAlert('Cannot add product to cart', 'error')
+        }
+    }) 
+    }
+</script>
+<script src="/public/javascripts/script.js"></script>
